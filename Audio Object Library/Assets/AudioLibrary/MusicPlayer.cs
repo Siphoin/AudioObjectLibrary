@@ -12,13 +12,13 @@ namespace AudioObjectLib
     private const float TIME_OUT_NEW_TRACK = 4f;
     [SerializeField] private AudioClip[] _musicList;
 
-    [SerializeField] private AudioClip[] _musicListCached;
+     private AudioClip[] _musicListCached;
 
     private AudioSource _audioSource;
 
     private AudioDataManager _audioManager;
 
-    private bool _lerping = false;
+   [SerializeField] private bool _lerping = false;
 
     private AudioClip _lastAudioClip;
 
@@ -45,7 +45,7 @@ namespace AudioObjectLib
         _audioManager.OnMusicEnabled += SetStatusMusic;
 
         _musicListCached = GetClipsWithArrayClips(_musicListCached, _musicList);
-
+        
         StartCoroutine(WaitNewTrack());
 
 
@@ -88,8 +88,16 @@ namespace AudioObjectLib
         {
             return;
         }
+        if (_lerping) 
+        {
+        StartCoroutine(LerpingVolume());            
+        }
 
-        StartCoroutine(LerpingVolume());
+        else 
+        {
+            ChangeVolume(_audioManager.GetVolumeMusic());
+        }
+
         PlayTrack(_selectedTrack);
     }
 
@@ -112,15 +120,11 @@ namespace AudioObjectLib
 
     private void ChangeVolume (float value)
     {
-        if (!_lerping)
-        {
-            _audioSource.volume = value;
-        }
+         _audioSource.volume = value;
     }
 
     private IEnumerator LerpingVolume()
     {
-        _lerping = true;
         float lerpValue = 0;
         while (true)
         {
@@ -180,7 +184,15 @@ namespace AudioObjectLib
 
         _musicList[0] = track;
 
-        StartCoroutine(LerpingVolume());
+        if (_lerping) 
+        {
+            StartCoroutine(LerpingVolume());
+        }
+
+        else {
+            ChangeVolume(_audioManager.GetVolumeMusic());
+        }
+        
 
         StartCoroutine(WaitNewTrack());
 
