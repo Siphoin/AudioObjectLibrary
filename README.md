@@ -33,6 +33,15 @@ AudioDataManager.CreateAudioObject(position, AudioClip);
 
 Audio Type describes the types of sounds.
 
+``` C#
+public enum AudioType
+{
+    FX,
+    Music,
+    NewDaySound,
+}
+```
+
 Demo is included in the repository.
 
 ![](https://raw.githubusercontent.com/Siphoin/AudioObjectLibrary/main/demo_screen.png)
