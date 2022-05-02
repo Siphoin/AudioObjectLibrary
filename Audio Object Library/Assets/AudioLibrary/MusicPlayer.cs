@@ -10,23 +10,22 @@ namespace AudioObjectLib
     public class MusicPlayer : MonoBehaviour
     {
     private const float TIME_OUT_NEW_TRACK = 4f;
-    [SerializeField] private AudioClip[] musicList;
+    [SerializeField] private AudioClip[] _musicList;
 
-    [SerializeField] private AudioClip[] musicListCached;
+    [SerializeField] private AudioClip[] _musicListCached;
 
-    private AudioSource audioSource;
+    private AudioSource _audioSource;
 
-    private AudioDataManager audioManager;
+    private AudioDataManager _audioManager;
 
-    private bool lerping = false;
+    private bool _lerping = false;
 
-    private AudioClip lastAudioClip;
+    private AudioClip _lastAudioClip;
 
-    private AudioClip selectedTrack;
-        // Use this for initialization
-        void Start()
+    private AudioClip _selectedTrack;
+      private void Start()
         {
-        if (musicList.Length == 0)
+        if (_musicList.Length == 0)
         {
             throw new MusicPlayerException("music list is emtry");
         }
@@ -34,18 +33,19 @@ namespace AudioObjectLib
         {
             throw new MusicPlayerException("audio manager not found");
         }
-        if (!TryGetComponent(out audioSource))
+        if (!TryGetComponent(out _audioSource))
         {
             throw new MusicPlayerException("music list is emtry");
         }
 
 
-        audioManager = AudioDataManager.Manager;
+        _audioManager = AudioDataManager.Manager;
 
-        audioManager.OnFXVolumeChanged += ChangeVolume;
-        audioManager.OnMusicEnabled += SetStatusMusic;
+        _audioManager.OnFXVolumeChanged += ChangeVolume;
+        _audioManager.OnMusicEnabled += SetStatusMusic;
 
-        musicListCached = GetClipsWithArrayClips(musicListCached, musicList);
+        _musicListCached = GetClipsWithArrayClips(_musicListCached, _musicList);
+
         StartCoroutine(WaitNewTrack());
 
 
@@ -56,7 +56,7 @@ namespace AudioObjectLib
     {
         if (enabled)
         {
-            if (!audioSource.isPlaying)
+            if (!_audioSource.isPlaying)
             {
                 NewTrack();
             }
@@ -64,9 +64,9 @@ namespace AudioObjectLib
 
         else
         {
-            if (audioSource.isPlaying)
+            if (_audioSource.isPlaying)
             {
-                audioSource.Stop();
+                _audioSource.Stop();
             }
         }
     }
@@ -74,9 +74,9 @@ namespace AudioObjectLib
     private void NewTrack()
     {
 
-        if (musicList.Length == 0)
+        if (_musicList.Length == 0)
         {
-            selectedTrack = musicList[0];
+            _selectedTrack = _musicList[0];
         }
         else
         {
@@ -84,27 +84,27 @@ namespace AudioObjectLib
 
         }
 
-        if (!audioManager.GetMusicEnabled())
+        if (!_audioManager.GetMusicEnabled())
         {
             return;
         }
 
         StartCoroutine(LerpingVolume());
-        PlayTrack(selectedTrack);
+        PlayTrack(_selectedTrack);
     }
 
     private void SelectRansomTrack()
     {
-        if (musicList.Length > 1)
+        if (_musicList.Length > 1)
         {
-        AudioClip[] tracks = musicList.Where(track => track != lastAudioClip).ToArray();
+        AudioClip[] tracks = _musicList.Where(track => track != _lastAudioClip).ToArray();
         
-        selectedTrack = tracks[Random.Range(0, tracks.Length)];
+        _selectedTrack = tracks[Random.Range(0, tracks.Length)];
         }
 
         else
         {
-            selectedTrack = musicList[0];
+            _selectedTrack = _musicList[0];
         }
 
     }
@@ -112,15 +112,15 @@ namespace AudioObjectLib
 
     private void ChangeVolume (float value)
     {
-        if (!lerping)
+        if (!_lerping)
         {
-            audioSource.volume = value;
+            _audioSource.volume = value;
         }
     }
 
     private IEnumerator LerpingVolume()
     {
-        lerping = true;
+        _lerping = true;
         float lerpValue = 0;
         while (true)
         {
@@ -128,11 +128,11 @@ namespace AudioObjectLib
 
             yield return new WaitForSeconds(fpsRate);
             lerpValue += fpsRate;
-            audioSource.volume = Mathf.Lerp(0, audioManager.GetVolumeMusic(), lerpValue);
+            _audioSource.volume = Mathf.Lerp(0, _audioManager.GetVolumeMusic(), lerpValue);
 
             if (lerpValue >= 1)
             {
-                lerping = false;
+                _lerping = false;
                 yield break;
             }
         }
@@ -145,8 +145,9 @@ namespace AudioObjectLib
 
         while (true)
         {
-        yield return new WaitForSecondsRealtime(selectedTrack.length + TIME_OUT_NEW_TRACK);
-            if (audioManager.GetMusicEnabled())
+        yield return new WaitForSecondsRealtime(_selectedTrack.length + TIME_OUT_NEW_TRACK);
+
+            if (_audioManager.GetMusicEnabled())
             {
              NewTrack();
             }
@@ -159,9 +160,9 @@ namespace AudioObjectLib
     private void PlayTrack (AudioClip track)
     {
 
-        audioSource.clip = track;
-        lastAudioClip = track;
-        audioSource.Play();
+        _audioSource.clip = track;
+        _lastAudioClip = track;
+        _audioSource.Play();
     }
 
     public void ReplaceTrack (AudioClip track)
@@ -173,11 +174,11 @@ namespace AudioObjectLib
         StopAllCoroutines();
 
 
-        audioSource.Stop();
+        _audioSource.Stop();
 
-        musicList = new AudioClip[1];
+        _musicList = new AudioClip[1];
 
-        musicList[0] = track;
+        _musicList[0] = track;
 
         StartCoroutine(LerpingVolume());
 
@@ -188,11 +189,11 @@ namespace AudioObjectLib
     public void ReturnOriginalListMusic ()
     {
 
-        musicList = GetClipsWithArrayClips(musicList, musicListCached);
+        _musicList = GetClipsWithArrayClips(_musicList, _musicListCached);
 
         StopAllCoroutines();
 
-        audioSource.Stop();
+        _audioSource.Stop();
         StartCoroutine(WaitNewTrack());
 
     }
@@ -211,15 +212,15 @@ namespace AudioObjectLib
 
     public AudioClip[] GetActiveTrackList ()
     {
-        AudioClip[] clips = new AudioClip[musicList.Length];
-        musicList.CopyTo(clips, 0);
+        AudioClip[] clips = new AudioClip[_musicList.Length];
+        _musicList.CopyTo(clips, 0);
         return clips;
     }
 
     public void SetTrackList (AudioClip[] tracks)
     {
         StopAllCoroutines();
-        musicList = GetClipsWithArrayClips(musicList, tracks);
+        _musicList = GetClipsWithArrayClips(_musicList, tracks);
         StartCoroutine(WaitNewTrack());
     }
 

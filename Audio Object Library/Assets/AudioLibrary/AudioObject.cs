@@ -6,19 +6,18 @@ namespace AudioObjectLib
     [RequireComponent(typeof(AudioSource))]
     public class AudioObject : MonoBehaviour
     {
-    [SerializeField] private AudioType typeAudio = AudioType.FX;
+    [SerializeField] private AudioType _typeAudio = AudioType.FX;
 
-    private AudioSource audioSource;
+    private AudioSource _audioSource;
 
-    private AudioDataManager dataManager;
+    private AudioDataManager _dataManager;
+    public AudioType TypeAudio => _typeAudio;
 
-    public AudioType TypeAudio { get => typeAudio; }
-
-    public event Action<AudioObject> onRemove;
+    public event Action<AudioObject> OnRemove;
 
 
     
-   private void Awake() => Ini();
+  
 
     private void Ini()
     {
@@ -28,22 +27,22 @@ namespace AudioObjectLib
         }
 
 
-        dataManager = AudioDataManager.Manager;
-        audioSource = GetComponent<AudioSource>();
-        switch (typeAudio)
+        _dataManager = AudioDataManager.Manager;
+        _audioSource = GetComponent<AudioSource>();
+        switch (_typeAudio)
         {
             case AudioType.FX:
-                dataManager.OnFXVolumeChanged += ChangeVolume;
+                _dataManager.OnFXVolumeChanged += ChangeVolume;
 
-                ChangeVolume(dataManager.GetVolumeFX());
+                ChangeVolume(_dataManager.GetVolumeFX());
                 break;
             case AudioType.Music:
-                dataManager.OnMusicVolumeChanged += ChangeVolume;
+                _dataManager.OnMusicVolumeChanged += ChangeVolume;
 
-                ChangeVolume(dataManager.GetVolumeMusic());
+                ChangeVolume(_dataManager.GetVolumeMusic());
                 break;
             default:
-                throw new AudioObjectException($"invalid type audio: {typeAudio}");
+                throw new AudioObjectException($"invalid type audio: {_typeAudio}");
         }
 
 
@@ -55,11 +54,7 @@ namespace AudioObjectLib
 
 
 
-    private void ChangeVolume (float value)
-    {
-
-        audioSource.volume = value;
-    }
+    
 
 
     public void Remove()
@@ -71,30 +66,30 @@ namespace AudioObjectLib
 
     private void Uncribe()
     {
-        if (dataManager != null)
+        if (_dataManager != null)
         {
-            switch (typeAudio)
+            switch (_typeAudio)
             {
                 case AudioType.FX:
-                    dataManager.OnFXVolumeChanged -= ChangeVolume;
+                    _dataManager.OnFXVolumeChanged -= ChangeVolume;
                     break;
                 case AudioType.Music:
-                    dataManager.OnMusicVolumeChanged -= ChangeVolume;
+                    _dataManager.OnMusicVolumeChanged -= ChangeVolume;
                     break;
                 default:
-                    throw new AudioObjectException($"invalid type audio: {typeAudio}");
+                    throw new AudioObjectException($"invalid type audio: {_typeAudio}");
             }
         }
     }
 
     public AudioSource GetAudioSource ()
     {
-        if (audioSource == null)
+        if (_audioSource == null)
         {
             Ini();
         }
 
-        return audioSource;
+        return _audioSource;
     }
 
 
@@ -102,7 +97,7 @@ namespace AudioObjectLib
     {
         try
         {
-            onRemove?.Invoke(this);
+            OnRemove?.Invoke(this);
             Uncribe();
         }
         catch
@@ -113,7 +108,7 @@ namespace AudioObjectLib
 
     private IEnumerator RemoveWaitRealtime ()
     {
-        float time = audioSource.clip.length + 0.01f;
+        float time = _audioSource.clip.length + 0.01f;
 #if UNITY_EDITOR
         Debug.Log($"{name} audio object destroy as {time} seconds");
 #endif
@@ -126,8 +121,13 @@ namespace AudioObjectLib
     public void RemoveIFNotPlaying ()
     {
         Ini();
+
         StartCoroutine(RemoveWaitRealtime());
     }
+
+     private void Awake() => Ini();
+
+    private void ChangeVolume (float value) => _audioSource.volume = value;
 
 }
 }
