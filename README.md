@@ -16,6 +16,15 @@ AudioDataManager.CreateAudioObject(position, AudioClip);
 
 There is a Music Player in which you can implement a playlist of musical compositions. You can set the sound to fade at the beginning of a new song or turn it off completely. You can set your own playlist for the music player, as well as repeat.
 
+``` C#
+musicPlayer.GetVolumeFX();
+```
+### Return float value of fx volume
+``` C#
+musicPlayer.GetVolumeMusic();
+```
+### Return float value of music volume
+
 AudioData is responsible for game data on volume as well as on / off sounds and music.
 
 Audio Data Manager controls Audio Data.
