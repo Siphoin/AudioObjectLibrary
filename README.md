@@ -45,3 +45,11 @@ public enum AudioType
 Demo is included in the repository.
 
 ![](https://raw.githubusercontent.com/Siphoin/AudioObjectLibrary/main/demo_screen.png)
+
+## Import:
+
+You can import the library in 2 ways:
+
+unitypackage with demo scene
+
+unitypackage with some library files and resources.
