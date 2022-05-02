@@ -8,9 +8,6 @@ Creating audio objects in the game space that are empty. You can set the lifespa
 
 
 
-#### this code return `AudioObject` reference.
-
-
 There is a Music Player in which you can implement a playlist of musical compositions. You can set the sound to fade at the beginning of a new song or turn it off completely. You can set your own playlist for the music player, as well as repeat.
 
 ``` C#
@@ -30,7 +27,7 @@ Audio Data Manager controls Audio Data.
 ``` C#
 AudioDataManager.CreateAudioObject(position, AudioClip);
 ```
-
+#### this code return `AudioObject` reference.
 Audio Type describes the types of sounds.
 
 ``` C#
