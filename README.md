@@ -15,3 +15,5 @@ Audio Data Manager controls Audio Data.
 Audio Type describes the types of sounds.
 
 Demo is included in the repository.
+
+![](https://raw.githubusercontent.com/Siphoin/AudioObjectLibrary/main/demo_screen.png)
