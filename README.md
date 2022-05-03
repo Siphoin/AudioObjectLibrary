@@ -74,6 +74,6 @@ Demo is included in the repository.
 
 You can import the library in 2 ways:
 
-unitypackage with demo scene
+unitypackage with demo scene. (AudioObjectLibrary_Demo.unitypackage)
 
-unitypackage with some library files and resources.
+unitypackage with some library files and resources. (AudioObjectLibrary_Lib.unitypackage)
