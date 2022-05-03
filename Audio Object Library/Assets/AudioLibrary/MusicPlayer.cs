@@ -20,6 +20,8 @@ namespace AudioObjectLib
 
     public event UnityAction<bool> OnStateMusicPlayer;
 
+    public event UnityAction<string> OnNewTrackPlaying;
+
     private delegate void NewState();
 
     private NewState _statePlay;
@@ -43,6 +45,8 @@ namespace AudioObjectLib
     private AudioClip _selectedTrack;
 
     public bool IsPlaying => _isPlaying;
+
+    public string NameCurrentPlayingClip => _selectedTrack.name;
 
 
       private void Start()
@@ -201,6 +205,8 @@ namespace AudioObjectLib
         _audioSource.clip = track;
         _lastAudioClip = track;
         _audioSource.Play();
+
+        OnNewTrackPlaying?.Invoke(track.name);
     }
 
     public void ReplaceTrack (AudioClip track)
@@ -278,24 +284,7 @@ namespace AudioObjectLib
 
     public void NextTrack ()
         {
-            if (!IsPlaying) 
-            {
-                return;
-            }
-            SetZeroIndexMusic();
-           
-            if (_indexSelectedTrack < _musicList.Length - 1) 
-            {
-                  _indexSelectedTrack++;
-            }
 
-            PlayTrack(_musicList[_indexSelectedTrack]);
-
-            ReloadWaitNextTrack();
-        }
-
-        public void BackTrack ()
-        {
             if (!IsPlaying)
             {
                 return;
@@ -306,6 +295,25 @@ namespace AudioObjectLib
             if (_indexSelectedTrack >= _musicList.Length - 1)
             {
                 _indexSelectedTrack--;
+            }
+
+            PlayTrack(_musicList[_indexSelectedTrack]);
+
+            ReloadWaitNextTrack();
+        }
+
+        public void BackTrack ()
+        {
+
+            if (!IsPlaying) 
+            {
+                return;
+            }
+            SetZeroIndexMusic();
+           
+            if (_indexSelectedTrack < _musicList.Length - 1) 
+            {
+                  _indexSelectedTrack++;
             }
 
             PlayTrack(_musicList[_indexSelectedTrack]);

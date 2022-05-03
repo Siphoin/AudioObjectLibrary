@@ -20,6 +20,8 @@ namespace AudioObjectLib.Demo
     [SerializeField] private Button _buttonNextMusic;
 
     [SerializeField] private Button _buttonBackMusic;
+
+    [SerializeField] private Text _textNameClip;
     
     private void Start() {
 
@@ -63,13 +65,22 @@ namespace AudioObjectLib.Demo
             throw new NullReferenceException("button back music not seted");
         }
 
+        if (!_textNameClip)
+        {
+            throw new NullReferenceException("text name clip not seted");
+        }
+
         _musicPlayer.OnStateMusicPlayer += SetNewIconStatus;
+
+        _musicPlayer.OnNewTrackPlaying += SetTextCurrentClip;
 
         _buttonStatusPlayer.onClick.AddListener(SetStatusMusicPlayer);
 
         _buttonNextMusic.onClick.AddListener(NextMusic);
 
         _buttonBackMusic.onClick.AddListener(BackMusic);
+
+        SetTextCurrentClip(_musicPlayer.NameCurrentPlayingClip);
 
 
 
@@ -91,10 +102,16 @@ namespace AudioObjectLib.Demo
 
     private void SetNewIconStatus (bool status) => _iconStatusPlaying.sprite = status ? _playSprite : _stopSprite;
 
+    private void SetTextCurrentClip (string nameClip) => _textNameClip.text = nameClip;
+
     private void NextMusic () => _musicPlayer.NextTrack();
 
     private void BackMusic () => _musicPlayer.BackTrack();
 
-    private void OnDestroy() => _musicPlayer.OnStateMusicPlayer -= SetNewIconStatus;
+    private void OnDestroy() 
+    {
+      _musicPlayer.OnStateMusicPlayer -= SetNewIconStatus;
+        _musicPlayer.OnNewTrackPlaying -= SetTextCurrentClip;
+    }
 }
 }

@@ -372,6 +372,7 @@ MonoBehaviour:
   _buttonStatusPlayer: {fileID: 613557904}
   _buttonNextMusic: {fileID: 2023437684}
   _buttonBackMusic: {fileID: 885350067}
+  _textNameClip: {fileID: 1767775222}
 --- !u!1 &477939656
 GameObject:
   m_ObjectHideFlags: 0
@@ -2070,7 +2071,7 @@ GameObject:
   - component: {fileID: 1767775223}
   - component: {fileID: 1767775222}
   m_Layer: 5
-  m_Name: Text (Legacy)
+  m_Name: name_track
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
