@@ -3,7 +3,7 @@
 ## This library implements audio for the Unity engine.
 
 Opportunities:
-## aUDIO oBJECT
+## Audio Object
 Creating audio objects in the game space that are empty. You can set the lifespan for these objects in the scene, as well as specify in which vector the sound will be located (XYZ) and the sound file itself. This solution is great for implementing 2D and 3D games. You can apply a distance 3D effect to an Audio Object that will be less audible at a farther distance and vice versa. You can manually destroy the Audio Object.
 
 ``` C#
