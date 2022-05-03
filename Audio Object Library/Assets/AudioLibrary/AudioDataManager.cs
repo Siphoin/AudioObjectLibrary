@@ -83,7 +83,7 @@ namespace AudioObjectLib
         OnMusicEnabled?.Invoke(_audioData.musicEnabled);
     }
 
-    public AudioObject CreateAudioObject (Vector3 position, AudioClip clip = null)
+    public AudioObject CreateAudioObject (Vector3 position, AudioClip clip)
     {
         AudioObject audioObject = Instantiate(_audioObjectPrefab);
         audioObject.transform.position = position;
