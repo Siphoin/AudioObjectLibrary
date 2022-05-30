@@ -1,4 +1,4 @@
- # Audio Object Library v1.1
+ # Audio Object Library v1.2
 
 ## This library implements audio for the Unity engine.
 
