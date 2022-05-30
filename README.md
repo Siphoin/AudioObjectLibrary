@@ -77,3 +77,5 @@ You can import the library in 2 ways:
 unitypackage with demo scene. (AudioObjectLibrary_Demo.unitypackage)
 
 unitypackage with some library files and resources. (AudioObjectLibrary_Lib.unitypackage)
+
+Please add a prefab Audio Object to Assets/Resources (emtry object with script AudioObject!!!!
