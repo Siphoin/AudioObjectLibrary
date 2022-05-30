@@ -67,7 +67,7 @@ namespace AudioObjectLib
 
             _audioManager = AudioDataManager.Manager;
 
-            _audioManager.OnFXVolumeChanged += ChangeVolume;
+            _audioManager.OnMusicVolumeChanged += ChangeVolume;
             _audioManager.OnMusicEnabled += SetStatusMusic;
 
             _musicListCached = GetClipsWithArrayClips(_musicListCached, _musicList);
