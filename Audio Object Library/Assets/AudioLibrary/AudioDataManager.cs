@@ -22,7 +22,6 @@ namespace AudioObjectLib
 
     public static AudioDataManager Manager { get => _manager; }
 
-    
    private void Awake()
     {
         if (_manager == null)
@@ -47,29 +46,29 @@ namespace AudioObjectLib
 
     public float GetVolumeFX ()
     {
-     return   _audioData.fxVolume;
+     return   _audioData.FXVolume;
     }
 
     public float GetVolumeMusic ()
     {
-        return _audioData.musicVolume;
+        return _audioData.MusicVolume;
     }
 
     public bool GetMusicEnabled ()
     {
-        return _audioData.musicEnabled;
+        return _audioData.MusicEnabled;
     }
 
     public void SetVolumeFX (float value)
     {
-        _audioData.fxVolume = ClampingVolume(value);
-        OnFXVolumeChanged?.Invoke(_audioData.fxVolume);
+        _audioData.FXVolume = ClampingVolume(value);
+        OnFXVolumeChanged?.Invoke(_audioData.FXVolume);
     }
 
     public void SetVolumeMusic (float value)
     {
-        _audioData.musicVolume = ClampingVolume(value);
-        OnMusicVolumeChanged?.Invoke(_audioData.musicVolume);
+        _audioData.MusicVolume = ClampingVolume(value);
+        OnMusicVolumeChanged?.Invoke(_audioData.MusicVolume);
     }
 
     private float ClampingVolume (float value)
@@ -79,8 +78,8 @@ namespace AudioObjectLib
 
     public void SetEnabledMusic (bool status)
     {
-        _audioData.musicEnabled = status;
-        OnMusicEnabled?.Invoke(_audioData.musicEnabled);
+        _audioData.MusicEnabled = status;
+        OnMusicEnabled?.Invoke(_audioData.MusicEnabled);
     }
 
     public AudioObject CreateAudioObject (Vector3 position, AudioClip clip)

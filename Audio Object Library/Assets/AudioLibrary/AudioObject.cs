@@ -15,10 +15,6 @@ namespace AudioObjectLib
 
     public event Action<AudioObject> OnRemove;
 
-
-    
-  
-
     private void Ini()
     {
         if (AudioDataManager.Manager == null)
@@ -44,18 +40,7 @@ namespace AudioObjectLib
             default:
                 throw new AudioObjectException($"invalid type audio: {_typeAudio}");
         }
-
-
-
-
-
     }
-
-
-
-
-    
-
 
     public void Remove()
     {
