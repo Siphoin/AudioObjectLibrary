@@ -336,6 +336,12 @@ namespace AudioObjectLib
                 _selectedTrack = _musicList[0];
             }
         }
+
+        private void OnDestroy() 
+        {
+            _audioManager.OnMusicVolumeChanged += ChangeVolume;
+            _audioManager.OnMusicEnabled += SetStatusMusic;
+        }
     private void ChangeVolume (float value) => _audioSource.volume = value;
 
     public void Play () => _statePlay();
