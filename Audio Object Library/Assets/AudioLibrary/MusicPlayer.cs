@@ -115,7 +115,7 @@ namespace AudioObjectLib
     private void NewTrack()
     {
 
-        if (_musicList.Length == 0)
+        if (_musicList.Length == 1)
         {
             _selectedTrack = _musicList[0];
         }
