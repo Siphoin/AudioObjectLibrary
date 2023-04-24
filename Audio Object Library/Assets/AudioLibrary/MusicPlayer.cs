@@ -147,6 +147,7 @@ namespace AudioObjectLib
         if (_musicList.Length > 1)
         {
         AudioClip[] tracks = _musicList.Where(track => track != _lastAudioClip).ToArray();
+
         _indexSelectedTrack = Random.Range(0, tracks.Length);
 
         _selectedTrack = tracks[_indexSelectedTrack];
@@ -189,7 +190,7 @@ namespace AudioObjectLib
         {
         yield return new WaitForSecondsRealtime(_selectedTrack.length + TIME_OUT_NEW_TRACK);
 
-            if (_audioManager.GetMusicEnabled())
+            if (_audioManager.GetMusicEnabled() && IsPlaying)
             {
              NewTrack();
             }
@@ -203,6 +204,7 @@ namespace AudioObjectLib
     {
 
         _audioSource.clip = track;
+
         _lastAudioClip = track;
         _audioSource.Play();
 
@@ -215,6 +217,7 @@ namespace AudioObjectLib
         {
             throw new MusicPlayerException("track is null");
         }
+
         StopAllCoroutines();
 
 
@@ -245,6 +248,7 @@ namespace AudioObjectLib
         StopAllCoroutines();
 
         _audioSource.Stop();
+
         StartCoroutine(WaitNewTrack());
 
     }
@@ -309,6 +313,7 @@ namespace AudioObjectLib
             {
                 return;
             }
+
             SetZeroIndexMusic();
            
             if (_indexSelectedTrack < _musicList.Length - 1) 

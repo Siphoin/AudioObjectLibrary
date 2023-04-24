@@ -15,9 +15,9 @@ namespace AudioObjectLib
 
     public event Action<AudioObject> OnRemove;
 
-    private void Ini()
+    private void Initialize()
     {
-        if (AudioDataManager.Manager == null)
+        if (AudioDataManager.Manager is null)
         {
             throw new AudioObjectException("Audio manager not found");
         }
@@ -25,6 +25,7 @@ namespace AudioObjectLib
 
         _dataManager = AudioDataManager.Manager;
         _audioSource = GetComponent<AudioSource>();
+
         switch (_typeAudio)
         {
             case AudioType.FX:
@@ -42,75 +43,45 @@ namespace AudioObjectLib
         }
     }
 
-    public void Remove()
+    public void Hide()
     {
-        Uncribe();
-        Destroy(gameObject);
-
-    }
-
-    private void Uncribe()
-    {
-        if (_dataManager != null)
-        {
-            switch (_typeAudio)
-            {
-                case AudioType.FX:
-                    _dataManager.OnFXVolumeChanged -= ChangeVolume;
-                    break;
-                case AudioType.Music:
-                    _dataManager.OnMusicVolumeChanged -= ChangeVolume;
-                    break;
-                default:
-                    throw new AudioObjectException($"invalid type audio: {_typeAudio}");
-            }
-        }
+     gameObject.SetActive(false);
     }
 
     public AudioSource GetAudioSource ()
     {
-        if (_audioSource == null)
+        if (_audioSource is null)
         {
-            Ini();
+            Initialize();
         }
 
         return _audioSource;
     }
 
-
-    private void OnDestroy()
-    {
-        try
-        {
-            OnRemove?.Invoke(this);
-            Uncribe();
-        }
-        catch
-        {
-        }
-
-    }
-
     private IEnumerator RemoveWaitRealtime ()
     {
-        float time = _audioSource.clip.length + 0.01f;
+
+            float time = _audioSource.clip.length + 0.01f;
+
+            yield return new WaitForSecondsRealtime(time);
+
 #if UNITY_EDITOR
-        Debug.Log($"{name} audio object destroy as {time} seconds");
+            Debug.Log($"{name} audio object ending play as {time} seconds");
 #endif
 
-        yield return new WaitForSecondsRealtime(time);
-        Remove();
+
+            Hide();
     }
 
 
     public void RemoveIFNotPlaying ()
     {
-        Ini();
+        Initialize();
 
         StartCoroutine(RemoveWaitRealtime());
     }
 
-     private void Awake() => Ini();
+     private void Awake() => Initialize();
 
     private void ChangeVolume (float value) => _audioSource.volume = value;
 

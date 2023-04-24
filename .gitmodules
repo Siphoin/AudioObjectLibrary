@@ -1,0 +1,3 @@
+[submodule "dependencies/repo"]
+	path = dependencies/repo
+	url = https://github.com/Siphoin/poolMono.git
