@@ -344,8 +344,8 @@ namespace AudioObjectLib
 
         private void OnDestroy() 
         {
-            _audioManager.OnMusicVolumeChanged += ChangeVolume;
-            _audioManager.OnMusicEnabled += SetStatusMusic;
+            _audioManager.OnMusicVolumeChanged -= ChangeVolume;
+            _audioManager.OnMusicEnabled -= SetStatusMusic;
         }
     private void ChangeVolume (float value) => _audioSource.volume = value;
 
